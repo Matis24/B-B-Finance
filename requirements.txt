@@ -15,3 +15,4 @@ filelock
 huggingface-hub
 PyYAML
 regex
+streamlit-autorefresh
