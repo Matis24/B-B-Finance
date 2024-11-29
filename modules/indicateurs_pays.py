@@ -5,6 +5,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 def afficher_indicateurs_pays():
+    st.markdown("<h1 style='text-align: center; color: #DAA520; font-size:80px'>B&B Finance</h1>", unsafe_allow_html=True)
+    st.markdown("<hr style='border:1px solid #444;'>", unsafe_allow_html=True)
+    
     # Application de styles CSS personnalisés
     st.markdown(
         """

@@ -3,6 +3,7 @@ import pandas as pd
 import yfinance as yf
 import plotly.graph_objects as go
 import base64
+from pathlib import Path
 
 # Import des pages (le dossier 'modules')
 from modules.marche_temps_reel import afficher_marche_temps_reel
@@ -14,10 +15,11 @@ from modules.actualites_financieres import afficher_actualites_financieres
 from modules.cryptomonnaies import afficher_cryptomonnaies
 from modules.indicateurs_pays import afficher_indicateurs_pays
 
+    
 # Configuration globale de la page
 st.set_page_config(
-    page_title="Application Financière",
-    page_icon="💹",
+    page_title="B&B Finance",
+    page_icon="./assets/logo.png",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -35,47 +37,80 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Fonction pour afficher le logo et le titre
-def afficher_logo():
-    # Lecture et encodage de l'image en base64
-    with open("assets/logo.png", "rb") as image_file:
-        encoded_image = base64.b64encode(image_file.read()).decode()
 
-    st.markdown(
-        f"""
-        <style>
-        .custom-header {{
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 10px 20px;
-            background-color: #0e1117;
-            margin-bottom: 20px;
-        }}
-        .custom-header img {{
-            height: 50px;
-            margin-right: 10px;
-        }}
-        .custom-header .title {{
-            font-size: 22px;
-            color: #DAA520;
-            font-weight: bold;
-        }}
-        </style>
-        <div class="custom-header">
-            <img src="data:image/png;base64,{encoded_image}" alt="Logo">
-            <div class="title">Application Financière</div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+# Fonction pour afficher le logo
+def afficher_logo():
+    # Fonction pour convertire image, icon, gif en base 64 pour streamlit cloud
+    def get_base64(file_path):
+        with open(file_path, "rb") as file:
+            data = file.read()
+        return base64.b64encode(data).decode()
+    
+    # Logo :
+    logo_path = Path("./assets/logo.png")
+    logo_base64 = get_base64(logo_path)
+    
+    gif_path = Path("./assets/etoile.gif")
+    gif_base64 = get_base64(gif_path)
+    
+    st.sidebar.markdown(
+            f"""
+            <style>
+            .custom-header {{
+                position: relative;
+                width: 100%;
+                height: 200px; /* Ajustez la hauteur selon vos besoins */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-image: url("data:image/gif;base64,{gif_base64}");
+                background-size: cover; /* Adapte la taille du GIF au conteneur */
+                background-repeat: no-repeat;
+                background-position: center;
+            }}
+            .custom-header img {{
+                position: relative;
+                z-index: 10; /* S'assure que le logo reste au-dessus du GIF */
+                height: 150px; /* Ajustez la taille du logo */
+            }}
+            </style>
+            <div class="custom-header">
+                <img src="data:image/png;base64,{logo_base64}" alt="Logo">
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+
 
 # Fonction pour afficher le contenu de la barre latérale
 def afficher_sidebar():
-    # Logo dans la barre latérale (optionnel)
-    # with st.sidebar:
-    #     st.image("assets/logo.png", use_column_width=True)
 
+    #Logo du site
+    afficher_logo()
+    
+    # Navigation entre les pages
+    menu = ["Accueil", "Marchés en temps réel", "Recherche d'actions", "Comparaison d'actions", "Alertes personnalisées", "Actualités financières", "Cryptomonnaies", "Indicateurs par Pays"]
+    choice = st.sidebar.selectbox("Menu", menu)
+    
+    if choice == "Accueil":
+        afficher_accueil()
+    elif choice == "Marchés en temps réel":
+        afficher_marche_temps_reel()
+    elif choice == "Recherche d'actions":
+        afficher_recherche_actions()
+    elif choice == "Comparaison d'actions":
+        afficher_comparaison_actions()
+    elif choice == "Alertes personnalisées":
+        afficher_alertes_personnalisees()
+    elif choice == "Actualités financières":
+        afficher_actualites_financieres()
+    elif choice == "Cryptomonnaies":
+        afficher_cryptomonnaies()
+    elif choice == "Indicateurs par Pays":
+        afficher_indicateurs_pays()
+
+    # Pied de page
     st.sidebar.markdown("---")
     st.sidebar.markdown("## À propos")
     st.sidebar.markdown("""
@@ -88,24 +123,30 @@ def afficher_sidebar():
     - Visualiser les indicateurs économiques par pays.
     """)
 
+    # Contact
     st.sidebar.markdown("## Contact")
     st.sidebar.markdown("""
-    💼 **Développé par** : *BELKHITER*
+    💼 **Développé par** : *BELKHITER & BREILLAD*
 
-    📧 **Email** : [mehdi.belkhiter9@gmail.com](mailto:votre.email@example.com)
+    📧 **Email** : 
+""")
+    
+    st.sidebar.markdown("""
+    [mehdi.belkhiter9@gmail.com](mailto:votre.email@example.com)
+    [mbreillad@gmail.com](mailto:votre.email@example.com)
         
-        """)
+    """)
 
     st.sidebar.markdown("---")
-    st.sidebar.markdown("© 2024 Application Financière")
+    st.sidebar.markdown("© 2024 B&B Finance. Tous droits réservés.")
 
 # Page d'accueil
 def afficher_accueil():
-    # Afficher l'en-tête avec logo
-    afficher_logo()
+    
+    st.markdown("<h1 style='text-align: center; color: #DAA520; font-size:80px'>B&B Finance</h1>", unsafe_allow_html=True)
 
     # Texte de bienvenue
-    st.markdown("<h1 style='text-align: center; color: #DAA520;'>Bienvenue sur notre application de visualisation des données financières</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #DAA520; font-size:20px'>Bienvenue sur notre application de visualisation des données financières</p>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; font-size:18px;'>Explorez les marchés financiers avec des outils interactifs et des données en temps réel.</p>", unsafe_allow_html=True)
     st.markdown("<hr style='border:1px solid #444;'>", unsafe_allow_html=True)
 
@@ -196,30 +237,10 @@ def afficher_accueil():
 
 # Fonction principale
 def main():
+    
     # Afficher le contenu de la barre latérale
     afficher_sidebar()
-
-    # Menu déroulant dans la barre latérale
-    menu = ["Accueil", "Marchés en temps réel", "Recherche d'actions", "Comparaison d'actions", "Alertes personnalisées", "Actualités financières", "Cryptomonnaies", "Indicateurs par Pays"]
-    choice = st.sidebar.selectbox("Menu", menu)
-
-    # Navigation entre les pages
-    if choice == "Accueil":
-        afficher_accueil()
-    elif choice == "Marchés en temps réel":
-        afficher_marche_temps_reel()
-    elif choice == "Recherche d'actions":
-        afficher_recherche_actions()
-    elif choice == "Comparaison d'actions":
-        afficher_comparaison_actions()
-    elif choice == "Alertes personnalisées":
-        afficher_alertes_personnalisees()
-    elif choice == "Actualités financières":
-        afficher_actualites_financieres()
-    elif choice == "Cryptomonnaies":
-        afficher_cryptomonnaies()
-    elif choice == "Indicateurs par Pays":
-        afficher_indicateurs_pays()
+    
 
 if __name__ == "__main__":
     main()

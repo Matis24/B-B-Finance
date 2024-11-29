@@ -4,6 +4,9 @@ import yfinance as yf
 import plotly.graph_objects as go
 
 def afficher_comparaison_actions():
+    st.markdown("<h1 style='text-align: center; color: #DAA520; font-size:80px'>B&B Finance</h1>", unsafe_allow_html=True)
+    st.markdown("<hr style='border:1px solid #444;'>", unsafe_allow_html=True)
+    
     st.title("📈 Comparaison Avancée d'Actions")
     st.markdown("### Analysez et comparez les performances de plusieurs actions avec des outils avancés.")
 

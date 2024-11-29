@@ -2,8 +2,12 @@ import streamlit as st
 import yfinance as yf
 import pandas as pd
 import plotly.graph_objs as go
+from modules.model import prediction
 
 def afficher_recherche_actions():
+    st.markdown("<h1 style='text-align: center; color: #DAA520; font-size:80px'>B&B Finance</h1>", unsafe_allow_html=True)
+    st.markdown("<hr style='border:1px solid #444;'>", unsafe_allow_html=True)
+    
     st.title("🔎 Recherche d'Actions")
     st.markdown("### Recherchez des actions et visualisez leurs performances.")
 
@@ -13,6 +17,16 @@ def afficher_recherche_actions():
     # Sélection de la période d'historique
     periode = st.selectbox("Sélectionnez la période d'historique", ["1 mois", "3 mois", "6 mois", "1 an", "5 ans", "Max"])
 
+    # Sélection de la période de prédictions
+    periode_pred = st.selectbox("Sélectionnez la période à prédire", ["1 mois", "3 mois", "6 mois", "1 an"])
+    
+    dict_periode_pred = {
+        "1 mois": "31",
+        "3 mois": "93",
+        "6 mois": "186",
+        "1 an": "365"
+    }
+    
     # Correspondance entre la sélection et la période de yfinance
     dict_periode = {
         "1 mois": "1mo",
@@ -42,6 +56,9 @@ def afficher_recherche_actions():
                     st.markdown(f"**Site Web :** {info.get('website', 'N/A')}")
                     st.markdown("---")
                     
+                    # Récupérer les prédictions
+                    predict_df = prediction(ticker,int(dict_periode_pred[periode_pred]))
+                    
                     # Affichage du graphique interactif
                     fig = go.Figure()
                     fig.add_trace(go.Scatter(
@@ -49,6 +66,13 @@ def afficher_recherche_actions():
                         y=historique["Close"],
                         mode='lines',
                         name='Prix de clôture'
+                    ))
+                    fig.add_trace(go.Scatter(
+                        x=predict_df['Date'],
+                        y=predict_df["Predictions"],
+                        mode='lines',
+                        name='Prédictions',
+                        line=dict(dash='dash')
                     ))
                     fig.update_layout(
                         title=f"Historique du prix de l'action {symbole.upper()}",

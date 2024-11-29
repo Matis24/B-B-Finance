@@ -137,6 +137,9 @@ def afficher_actualites_financieres():
     """
     Page principale pour afficher les actualités financières.
     """
+    st.markdown("<h1 style='text-align: center; color: #DAA520; font-size:80px'>B&B Finance</h1>", unsafe_allow_html=True)
+    st.markdown("<hr style='border:1px solid #444;'>", unsafe_allow_html=True)
+    
     st.title("📰 Actualités Financières et Globales")
     st.write("Consultez les dernières nouvelles sur les entreprises, la technologie, la science, la santé, et le monde.")
 

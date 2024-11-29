@@ -3,6 +3,8 @@ import pandas as pd
 from utils.data_fetcher import obtenir_donnees_indice
 
 def afficher_alertes_personnalisees():
+    st.markdown("<h1 style='text-align: center; color: #DAA520; font-size:80px'>B&B Finance</h1>", unsafe_allow_html=True)
+    st.markdown("<hr style='border:1px solid #444;'>", unsafe_allow_html=True)
     # Application de styles CSS personnalisés
     st.markdown(
         """

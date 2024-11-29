@@ -6,6 +6,8 @@ import random  # Pour générer des données aléatoires
 from streamlit_autorefresh import st_autorefresh
 
 def afficher_marche_temps_reel():
+    st.markdown("<h1 style='text-align: center; color: #DAA520; font-size:80px'>B&B Finance</h1>", unsafe_allow_html=True)
+    st.markdown("<hr style='border:1px solid #444;'>", unsafe_allow_html=True)
     st.title("📈 Marchés en Temps Réel")
     st.markdown("### Visualisez les variations des principaux indices boursiers en temps réel.")
 

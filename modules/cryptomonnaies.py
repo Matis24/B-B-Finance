@@ -195,6 +195,9 @@ def afficher_cryptomonnaies():
     """
     Page principale pour afficher les données sur les cryptomonnaies.
     """
+    st.markdown("<h1 style='text-align: center; color: #DAA520; font-size:80px'>B&B Finance</h1>", unsafe_allow_html=True)
+    st.markdown("<hr style='border:1px solid #444;'>", unsafe_allow_html=True)
+    
     st.title("💰 Cryptomonnaies")
     st.markdown("### Consultez les données en temps réel sur les principales cryptomonnaies.")
 
