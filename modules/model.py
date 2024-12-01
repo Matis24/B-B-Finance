@@ -11,13 +11,11 @@ def prediction(ticker,periode):
     historique_max = pd.DataFrame(historique_max_df)
 
     # Exploration des données
-    #plt.plot(historique_max['Close'])
 
     # Tri des données proche de 0
     mean_open = historique_max['Open'].mean()
     historique_max = historique_max[(historique_max['Open'] >= 0.2*mean_open)]
 
-    # Ajout des journées non ouvrables
     # On ajoute les dates manquantes : pour les weeks-ends, jours fériés ou données non saisies
     date_range = pd.date_range(start=historique_max.index.min(), end=historique_max.index.max())
     historique_max = historique_max.reindex(date_range)
@@ -37,11 +35,7 @@ def prediction(ticker,periode):
 
     historique_max.dropna(inplace=True)
 
-    # Exploration des données après traitement
-    #plt.plot(historique_max['Close'])
-
     #  Entrainement du model
-    # Caractéristiques (features) et cible (target)
     X = historique_max.drop(columns=['Target','Dividends','Stock Splits'])
     y = historique_max['Target']
 
@@ -67,30 +61,3 @@ def prediction(ticker,periode):
     predict_df.reset_index(inplace=True)
     
     return predict_df
-    # 
-    #plt.plot(historique_max['Close'])
-    #plt.plot(predicted_df['Predicted_Close'])
-    
-    
-# %% Test graphique
-# predict_df = prediction(yf.Ticker('AAPL'))
-# predict_df.reset_index(inplace=True)
-
-# # %%
-# historique_max_df = yf.Ticker('AAPL').history(period='max')
-
-# fig = go.Figure()
-# fig.add_trace(go.Scatter(
-#     x=historique_max_df.index,
-#     y=historique_max_df["Close"],
-#     mode='lines',
-#     name='Prix de clôture'
-# ))
-# fig.add_trace(go.Scatter(
-#     x=predict_df['Date'],
-#     y=predict_df["Predictions"],
-#     mode='lines',
-#     name='Prédictions',
-#     line=dict(dash='dash')
-# ))
-# %%

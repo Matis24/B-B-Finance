@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import yfinance as yf
 import plotly.graph_objects as go
-from plotly.colors import make_colorscale
 import base64
 from pathlib import Path
 
@@ -240,8 +239,6 @@ def afficher_accueil():
 
 # Fonction principale
 def main():
-    
-    # Afficher le contenu de la barre latérale
     afficher_sidebar()
     
 

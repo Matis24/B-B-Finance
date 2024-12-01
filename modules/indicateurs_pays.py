@@ -127,7 +127,7 @@ def afficher_indicateurs_pays():
         color="Value",
         hover_name="Country",
         color_continuous_scale=px.colors.sequential.Turbo,
-        template='plotly_dark',  # Utilisation du thème sombre
+        template='plotly_dark',
         labels={'Value': indicateur_nom},
         hover_data={'iso_alpha': False, 'Value': ':.2f'},
         projection='natural earth',

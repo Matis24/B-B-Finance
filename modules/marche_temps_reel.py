@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
 import time
-import random  # Pour générer des données aléatoires
-# from utils.data_fetcher import obtenir_donnees_indice  # Réactivez cette ligne pour utiliser les données réelles
+import random 
 from streamlit_autorefresh import st_autorefresh
 
 def afficher_marche_temps_reel():
@@ -37,9 +36,6 @@ def afficher_marche_temps_reel():
     # Si la mise à jour en temps réel est activée, rafraîchir la page automatiquement
     if start:
         st_autorefresh(interval=refresh_rate * 1000, key="data_refresh")
-        # Le nombre de rafraîchissements est masqué en supprimant la ligne suivante
-        # count = st_autorefresh(interval=refresh_rate * 1000, key="data_refresh")
-        # st.write(f"Rafraîchissement numéro : {count}")
 
     data = []
     for nom, symbole in indices.items():
@@ -50,19 +46,10 @@ def afficher_marche_temps_reel():
             variation_str = f"{variation:.2f}%"
             data.append([nom, prix, variation_str])
 
-            # Si vous souhaitez utiliser les données réelles, décommentez les lignes suivantes et commentez les lignes ci-dessus
-            # prix, variation = obtenir_donnees_indice(symbole)
-            # if prix is not None and variation is not None:
-            #     variation_str = f"{variation:.2f}%"
-            #     data.append([nom, prix, variation_str])
-            # else:
-            #     data.append([nom, "N/A", "N/A"])
-
         except Exception as e:
             st.warning(f"Erreur pour {nom} ({symbole}) : {str(e)}")
             data.append([nom, "N/A", "N/A"])
 
-    # Créer un DataFrame
     df = pd.DataFrame(data, columns=["Indice", "Prix Actuel", "Variation (%)"])
 
     # Appliquer le style à la colonne Variation (%) uniquement
@@ -70,13 +57,13 @@ def afficher_marche_temps_reel():
         try:
             val_float = float(val.strip('%'))
             if val_float > 0:
-                color = 'green'  # Vert
+                color = 'green' 
                 icon = '🔼'
             elif val_float < 0:
-                color = 'red'  # Rouge
+                color = 'red' 
                 icon = '🔽'
             else:
-                color = 'grey'  # Gris
+                color = 'grey'
                 icon = ''
             return f'color: {color}; font-weight: bold;', icon
         except:

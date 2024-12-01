@@ -140,7 +140,7 @@ def afficher_graphiques_crypto(data, devise):
         textposition="top center",
         marker=dict(
             size=8,
-            color=selected_data["current_price"],  # Couleur en fonction du prix actuel
+            color=selected_data["current_price"],
             colorscale='Viridis',
             opacity=0.8,
             colorbar=dict(title='Prix actuel')
