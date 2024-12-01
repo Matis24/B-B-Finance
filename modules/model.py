@@ -1,8 +1,7 @@
 #%%
-import yfinance as yf
 import pandas as pd
 import numpy as np
-from xgboost import XGBRegressor
+import lightgbm as lgb
 
 #%%
 def prediction(ticker,periode):
@@ -15,9 +14,8 @@ def prediction(ticker,periode):
     #plt.plot(historique_max['Close'])
 
     # Tri des données proche de 0
-    # On supprime les périodes où la valeur de l'action est très éloigné de la moyenne (une action est proche de 0 pendant des années)
     mean_open = historique_max['Open'].mean()
-    historique_max = historique_max[(historique_max['Open'] >= 0.5*mean_open)]
+    historique_max = historique_max[(historique_max['Open'] >= 0.2*mean_open)]
 
     # Ajout des journées non ouvrables
     # On ajoute les dates manquantes : pour les weeks-ends, jours fériés ou données non saisies
@@ -28,8 +26,12 @@ def prediction(ticker,periode):
     historique_max = historique_max.ffill()
 
     # Ajoute d'un retard pour prédire chaque données grâce à l'historique des 30 derniers mois
-    for lag in range(1, 365):
-        historique_max[f'Close_lag{lag}'] = historique_max['Close'].shift(lag)
+    lags = [historique_max['Close'].shift(lag) for lag in range(1, 180)]
+    lag_df = pd.concat(lags, axis=1)
+
+    lag_df.columns = [f'Close_lag{lag}' for lag in range(1, 180)]
+
+    historique_max = pd.concat([historique_max, lag_df], axis=1)
 
     historique_max['Target'] = historique_max['Close'].shift(-1)
 
@@ -40,11 +42,11 @@ def prediction(ticker,periode):
 
     #  Entrainement du model
     # Caractéristiques (features) et cible (target)
-    X = historique_max.drop(columns=['Target'])
+    X = historique_max.drop(columns=['Target','Dividends','Stock Splits'])
     y = historique_max['Target']
 
     # Entraîner le modèle sur toutes les données disponibles
-    model = XGBRegressor(objective='reg:squarederror', n_estimators=100, learning_rate=0.5)
+    model = lgb.LGBMRegressor(n_estimators=100, learning_rate=0.5)
     model.fit(X, y)
 
     # Prévoir les 30 prochains jours

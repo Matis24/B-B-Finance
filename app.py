@@ -2,12 +2,13 @@ import streamlit as st
 import pandas as pd
 import yfinance as yf
 import plotly.graph_objects as go
+from plotly.colors import make_colorscale
 import base64
 from pathlib import Path
 
 # Import des pages (le dossier 'modules')
 from modules.marche_temps_reel import afficher_marche_temps_reel
-from modules.recherche_actions import afficher_recherche_actions
+from modules.recherche_predict_actions import afficher_recherche_actions
 from modules.comparaison_actions import afficher_comparaison_actions
 from modules.alertes_personnalisees import afficher_alertes_personnalisees
 from utils.data_fetcher import obtenir_donnees_indice
@@ -90,14 +91,14 @@ def afficher_sidebar():
     afficher_logo()
     
     # Navigation entre les pages
-    menu = ["Accueil", "Marchés en temps réel", "Recherche d'actions", "Comparaison d'actions", "Alertes personnalisées", "Actualités financières", "Cryptomonnaies", "Indicateurs par Pays"]
+    menu = ["Accueil", "Marchés en temps réel", "Recherche et prédiction d'actions", "Comparaison d'actions", "Alertes personnalisées", "Actualités financières", "Cryptomonnaies", "Indicateurs par Pays"]
     choice = st.sidebar.selectbox("Menu", menu)
     
     if choice == "Accueil":
         afficher_accueil()
     elif choice == "Marchés en temps réel":
         afficher_marche_temps_reel()
-    elif choice == "Recherche d'actions":
+    elif choice == "Recherche et prédiction d'actions":
         afficher_recherche_actions()
     elif choice == "Comparaison d'actions":
         afficher_comparaison_actions()
@@ -116,7 +117,7 @@ def afficher_sidebar():
     st.sidebar.markdown("""
     Cette application vous permet de :
     - Suivre les marchés financiers en temps réel.
-    - Rechercher et comparer des actions.
+    - Rechercher et comparer des actions et leur prédiction.
     - Recevoir des alertes personnalisées.
     - Consulter les actualités financières.
     - Explorer les cryptomonnaies.
@@ -126,11 +127,10 @@ def afficher_sidebar():
     # Contact
     st.sidebar.markdown("## Contact")
     st.sidebar.markdown("""
-    💼 **Développé par** : *BELKHITER & BREILLAD*
+    💼 **Développé par** : """)
+    st.sidebar.markdown("""*BELKHITER & BREILLAD*""")
 
-    📧 **Email** : 
-""")
-    
+    st.sidebar.markdown(""" 📧 **Email** : """)
     st.sidebar.markdown("""
     [mehdi.belkhiter9@gmail.com](mailto:votre.email@example.com)
     [mbreillad@gmail.com](mailto:votre.email@example.com)
@@ -183,7 +183,7 @@ def afficher_accueil():
         fig = go.Figure()
         for nom, symbole in indices.items():
             ticker = yf.Ticker(symbole)
-            historique = ticker.history(period="5d")
+            historique = ticker.history(period="1y")
             if not historique.empty:
                 fig.add_trace(go.Scatter(
                     x=historique.index,
@@ -193,7 +193,7 @@ def afficher_accueil():
                 ))
 
         fig.update_layout(
-            title="Indices Majeurs sur les 5 Derniers Jours",
+            title="Indices Majeurs depuis le début de l'année",
             xaxis_title="Date",
             yaxis_title="Prix de Clôture",
             template="plotly_dark",
@@ -212,7 +212,10 @@ def afficher_accueil():
     for nom, symbole in indices.items():
         prix, variation = obtenir_donnees_indice(symbole)
         if prix is not None and variation is not None:
-            couleur = "#3ee144" if variation > 0 else "#e14444"
+            if variation > 0:
+                couleur = f"rgba(62, 225, 68, {abs(variation)})"
+            else:
+                couleur = f"rgba(225, 68, 68, {abs(variation)})"
             fig_bar.add_trace(go.Bar(
                 x=[nom],
                 y=[variation],
@@ -223,7 +226,7 @@ def afficher_accueil():
             ))
 
     fig_bar.update_layout(
-        title="Variation des Indices (%)",
+        title="Variation des Indices pendant les 5 derniers jours (%)",
         xaxis_title="Indices",
         yaxis_title="Variation (%)",
         template="plotly_dark",

@@ -8,8 +8,8 @@ def afficher_recherche_actions():
     st.markdown("<h1 style='text-align: center; color: #DAA520; font-size:80px'>B&B Finance</h1>", unsafe_allow_html=True)
     st.markdown("<hr style='border:1px solid #444;'>", unsafe_allow_html=True)
     
-    st.title("🔎 Recherche d'Actions")
-    st.markdown("### Recherchez des actions et visualisez leurs performances.")
+    st.title("🔎 Recherche et Prévisions d'Actions")
+    st.markdown("### Recherchez des actions et visualisez leurs performances ainsi que leurs prévisions.")
 
     # Barre de recherche pour le symbole de l'action
     symbole = st.text_input("Entrez le symbole de l'action (par exemple, AAPL pour Apple)", "AAPL")
@@ -36,6 +36,9 @@ def afficher_recherche_actions():
         "5 ans": "5y",
         "Max": "max"
     }
+    
+    predict = st.checkbox('Afficher les prédictions')
+    predict
 
     # Bouton pour lancer la recherche
     if st.button("Rechercher"):
@@ -57,34 +60,55 @@ def afficher_recherche_actions():
                     st.markdown("---")
                     
                     # Récupérer les prédictions
-                    predict_df = prediction(ticker,int(dict_periode_pred[periode_pred]))
+                    if predict:
+                        predict_df = prediction(ticker,int(dict_periode_pred[periode_pred]))
                     
-                    # Affichage du graphique interactif
-                    fig = go.Figure()
-                    fig.add_trace(go.Scatter(
-                        x=historique.index,
-                        y=historique["Close"],
-                        mode='lines',
-                        name='Prix de clôture'
-                    ))
-                    fig.add_trace(go.Scatter(
-                        x=predict_df['Date'],
-                        y=predict_df["Predictions"],
-                        mode='lines',
-                        name='Prédictions',
-                        line=dict(dash='dash')
-                    ))
-                    fig.update_layout(
-                        title=f"Historique du prix de l'action {symbole.upper()}",
-                        xaxis_title="Date",
-                        yaxis_title="Prix de clôture",
-                        template="plotly_dark",
-                        paper_bgcolor='#0e1117',
-                        plot_bgcolor='#0e1117',
-                        font=dict(color='#e6e6e6'),
-                        title_font=dict(color='#DAA520')
-                    )
-                    st.plotly_chart(fig, use_container_width=True)
+                        # Affichage du graphique interactif
+                        fig = go.Figure()
+                        fig.add_trace(go.Scatter(
+                            x=historique.index,
+                            y=historique["Close"],
+                            mode='lines',
+                            name='Prix de clôture'
+                        ))
+                        fig.add_trace(go.Scatter(
+                            x=predict_df['Date'],
+                            y=predict_df["Predictions"],
+                            mode='lines',
+                            name='Prédictions',
+                            line=dict(dash='dash')
+                        ))
+                        fig.update_layout(
+                            title=f"Historique du prix de l'action {symbole.upper()}",
+                            xaxis_title="Date",
+                            yaxis_title="Prix de clôture",
+                            template="plotly_dark",
+                            paper_bgcolor='#0e1117',
+                            plot_bgcolor='#0e1117',
+                            font=dict(color='#e6e6e6'),
+                            title_font=dict(color='#DAA520')
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
+                    else:
+                                                # Affichage du graphique interactif
+                        fig = go.Figure()
+                        fig.add_trace(go.Scatter(
+                            x=historique.index,
+                            y=historique["Close"],
+                            mode='lines',
+                            name='Prix de clôture'
+                        ))
+                        fig.update_layout(
+                            title=f"Historique du prix de l'action {symbole.upper()}",
+                            xaxis_title="Date",
+                            yaxis_title="Prix de clôture",
+                            template="plotly_dark",
+                            paper_bgcolor='#0e1117',
+                            plot_bgcolor='#0e1117',
+                            font=dict(color='#e6e6e6'),
+                            title_font=dict(color='#DAA520')
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
 
                     # Affichage des indicateurs financiers clés
                     st.markdown("### 📊 Indicateurs Financiers Clés")
