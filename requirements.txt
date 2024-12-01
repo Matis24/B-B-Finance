@@ -5,7 +5,7 @@ matplotlib
 seaborn
 plotly
 scikit-learn
-lgb
+lightgbm
 torch
 torchvision
 transformers
