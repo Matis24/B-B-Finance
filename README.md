@@ -1,4 +1,4 @@
-# ![B&B Finance](assets/logo.png) B&B Finance
+# <img src="assets/logo.png" alt="B&B Finance" width="10" /> B&B Finance
 
 Bienvenue dans **B&B Finance**, votre tableau de bord complet pour suivre les dernières actualités financières, analyser les tendances économiques mondiales, surveiller les cryptomonnaies et configurer des alertes personnalisées pour les actions qui vous intéressent.
 
@@ -10,8 +10,7 @@ Bienvenue dans **B&B Finance**, votre tableau de bord complet pour suivre les de
 - **Analyse Économique Mondiale** : Explorez les indicateurs économiques clés par pays pour une prise de décision éclairée.
 - **Alertes Personnalisées** : Configurez des alertes sur les actions pour recevoir des notifications lorsque certaines conditions sont remplies.
 
-![B&B Finance](assets/acceuil.png)
----
+![](assets/acceuil.jpg)
 
 ## 📂 **Structure du projet**
 
@@ -31,7 +30,7 @@ Bienvenue dans **B&B Finance**, votre tableau de bord complet pour suivre les de
 - **comparaison_actions.py** : Après avoir choisit plusieurs actions provenant de la bibliothèque **yfinance**, affiche un tableau de performances des actions, des courbes pour comparer leur prix de clôture ou de télécharger les données historiques pour une analyse plus approfondie.
 - **cryptomonnaies.py** : Récupère des informations sur les cryptommonaies à partir de l'API **COINGECKO** et affiche différents graphiques (Courbes, Heatmap, Graphe 3D, Tableau) pour les comparer
 - **indicateurs_pays.py** : Récupère des informations de l'API **worldbank**. Des filtres dans la sidebar permettent ensuite de sélectionner, parmis une vingtaine, un indicateur clé (%dette ppublique, population, accès à l'éctrécité, ...)
-![B&B Finance](assets/mondiale.png)
+![B&B Finance](assets/mondiale.jpg)
 - **marche_temps_reel.py** : Utilise **streamlit_autorefresh** pour rafrachir selon une période choisit en filtre par l'utilisateur les prix, variation des actions.
 - **model.py** : On récupère les données historiques de l'action choisit dans **recherche_predict_actions.py** et entraine un modèle Light Gradient Boosting (choisit pour sa rapidité une fois l'application mis en cloud) et affiche les prédictions sur la période choisit par l'utilisateurs.
 - **recherche_predict_actions.py** : On choisit une action et une période à afficher, ainsi que la période de prévisions à afficher.
